@@ -62,3 +62,23 @@ Node *tortoiseAndHare(Node *head) {
   }
   return slow;
 }
+
+// This algorithm can also be used to detect the loops in the Linked List data
+// structure.
+Node *loopInLL(Node *head) {
+  if (head == nullptr || head->next == nullptr) {
+    return head;
+  }
+  Node *slow = head;
+  Node *fast = head;
+  while (fast && fast->next) {
+    slow = slow->next;
+    fast = fast->next->next;
+    if (slow == fast) {
+      cout << "Loop Detected" << endl;
+      return head;
+    }
+  }
+  cout << "No Loop Detected" << endl;
+  return head;
+}
