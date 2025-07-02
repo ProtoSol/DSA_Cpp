@@ -19,6 +19,21 @@ class Node {
   }
 };
 
+Node* reverseLLIter(Node* head) {
+  if (head == nullptr) return nullptr;
+
+  Node* temp = head;
+  Node* front;
+  Node* prev = nullptr;
+  while (temp) {
+    front = temp->next;
+    temp->next = prev;
+    prev = temp;
+    temp = front;
+  }
+  return prev;
+}
+
 bool palindromeLL(Node* head);
 
 int main() {
@@ -41,4 +56,30 @@ int main() {
   return 0;
 }
 
-bool palindromeLL(Node* head) { return false; }
+bool palindromeLL(Node* head) {
+  if (head == nullptr || head->next == nullptr) return true;
+
+  // First we find the middle
+  Node* fast = head;
+  Node* slow = head;
+  while (fast->next && fast->next->next) {
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+  // Now we get the middle part and will start to reverse the other half
+  Node* newHead = reverseLLIter(slow->next);
+
+  // Now we compare
+  Node* first = head;
+  Node* second = newHead;
+  while (second) {
+    if (first->data != second->data) {
+      reverseLLIter(newHead);
+      return false;
+    }
+    first = first->next;
+    second = second->next;
+  }
+  reverseLLIter(newHead);
+  return true;
+}
