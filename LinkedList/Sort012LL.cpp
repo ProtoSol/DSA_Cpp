@@ -33,6 +33,7 @@ void printLL(Node* head) {
 }
 
 // Function to remove the node from last place
+Node* sort012LLBrute(Node* head);
 Node* sort012LL(Node* head);
 
 int main() {
@@ -54,13 +55,13 @@ int main() {
   printLL(head);
   // Sorting the LinkedList
   cout << "After Sorting:" << endl;
-  sort012LL(head);
-  printLL(head);
+  // sort012LLBrute(head);
+  printLL(sort012LL(head));
 
   return 0;
 }
 
-Node* sort012LL(Node* head) {
+Node* sort012LLBrute(Node* head) {
   if (!head || !head->next) return head;
 
   int count[3] = {0, 0, 0};
@@ -79,4 +80,40 @@ Node* sort012LL(Node* head) {
     }
   }
   return head;
+}
+
+Node* sort012LL(Node* head) {
+  if (head == nullptr || head->next == nullptr) {
+    return head;
+  }
+
+  // Dummy heads and tails for sublists
+  Node zeroDummy(-1), oneDummy(-1), twoDummy(-1);
+  Node* zeroTail = &zeroDummy;
+  Node* oneTail = &oneDummy;
+  Node* twoTail = &twoDummy;
+
+  // Distribute nodes into 0s, 1s, and 2s
+  Node* curr = head;
+  while (curr) {
+    if (curr->data == 0) {
+      zeroTail->next = curr;
+      zeroTail = curr;
+    } else if (curr->data == 1) {
+      oneTail->next = curr;
+      oneTail = curr;
+    } else {  // curr->data == 2
+      twoTail->next = curr;
+      twoTail = curr;
+    }
+    curr = curr->next;
+  }
+
+  // Stitch the lists together
+  zeroTail->next = (oneDummy.next != nullptr) ? oneDummy.next : twoDummy.next;
+  oneTail->next = twoDummy.next;
+  twoTail->next = nullptr;
+
+  // Return new head
+  return zeroDummy.next;
 }
