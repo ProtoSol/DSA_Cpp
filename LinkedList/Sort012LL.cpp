@@ -53,10 +53,30 @@ int main() {
   // Original Linked List
   printLL(head);
   // Sorting the LinkedList
+  cout << "After Sorting:" << endl;
   sort012LL(head);
   printLL(head);
 
   return 0;
 }
 
-Node* sort012LL(Node* head) { return head; }
+Node* sort012LL(Node* head) {
+  if (!head || !head->next) return head;
+
+  int count[3] = {0, 0, 0};
+  Node* temp = head;
+
+  while (temp) {
+    count[temp->data]++;
+    temp = temp->next;
+  }
+
+  temp = head;
+  for (int i = 0; i < 3; ++i) {
+    while (count[i]--) {
+      temp->data = i;
+      temp = temp->next;
+    }
+  }
+  return head;
+}
